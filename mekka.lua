@@ -140,10 +140,11 @@ t = function (event, ...)
         control = control or 0
         counter = counter or 0
         if msg == "SPELL_CAST_SUCCESS" and spellID == 287952 then --check for Wormhole Generator
-            aura_env.affPlayers = {}
+            startVars()
 		        control = 0
 			      counter = 0
             flagged = false
+            
         elseif msg == "SPELL_AURA_APPLIED" then
 		        if spellID == 287167 then --check for Discombobulation
                 counter = counter + 1
@@ -151,6 +152,7 @@ t = function (event, ...)
 				        aura_env.affPlayers[counter] = destName
                 if destName == aura_env.me then flagged = true end
                 -- SetRaidTarget(destName, counter+3)
+                
             elseif spellID == 287114 then --check for Miscalculated Teleport
 			          changeHealerState(destName, false)
 		            control = control + 1
