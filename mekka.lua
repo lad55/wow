@@ -1,7 +1,15 @@
+--[[
+------------------------
+--                    --
+--   General Helpers  --
+--                    --
+------------------------ 
+]]--
+
 aura_env = {"config", "healers", "affPlayers", "display", "me"}
 
 function UnitName(player)
-    return "Luidz", "Azralon"
+    return "Pedrilho", "Azralon"
 end
 
 aura_env.config = {
@@ -157,14 +165,14 @@ t = function(event, ...)
                 changeHealerState(destName, false)
                 control = control + 1
                 if destName == aura_env.me then flagged = true end
-                if control == 3 and not flagged then
+                if control == 3 and not flagged and (#aura_env.affPlayers > 0) then
                     aura_env.display = playerDispelDecision()
                     return true
                 end
             end
 			
         elseif msg == "SPELL_AURA_REMOVED" then
-            if spellID == 287167 or spellID == 287114 then --check for Discombobulation
+            if spellID == 287167 or spellID == 287114 then --check for Discombobulation/Miscalculated Teleport dispels/wear offs
             changeHealerState(destName, true)
             -- SetRaidTarget(destName, 0)
             end
@@ -175,7 +183,7 @@ end
 trigger = false
 t("ENCOUNTER_START")
 
-resetRolls()
+math.randomseed(math.floor(os.clock()))
 --Wormhole Generator cast
 t("COMBAT_LOG_EVENT_UNFILTERED", _, "SPELL_CAST_SUCCESS", _, _, "High Tinker Mekkatorque", _, _, _, "target", _, _, 287952)
 
@@ -225,6 +233,8 @@ t("COMBAT_LOG_EVENT_UNFILTERED", _, "SPELL_AURA_REMOVED", _, _, "High Tinker Mek
 
 if trigger then
     print(aura_env.display)
+else
+    print("se fudeu")
 end
 resetRolls()
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -280,5 +290,6 @@ t("COMBAT_LOG_EVENT_UNFILTERED", _, "SPELL_AURA_REMOVED", _, _, "High Tinker Mek
 
 if trigger then
     print(aura_env.display)
+else
+    print("se fudeu")
 end
-resetRolls()
