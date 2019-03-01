@@ -35,7 +35,7 @@ function SetRaidTarget(player, mark)
         end
     else
         markers[mark] = player
-        print(player .. " foi maracdo com " .. mark)
+        print(player .. " foi marcado com " .. mark)
     end
 end
 
@@ -73,10 +73,10 @@ end
 
 aura_env.healers = {
     {aura_env.config["option1"], true},
-	  {aura_env.config["option2"], true},
-	  {aura_env.config["option3"], true},
-	  {aura_env.config["option4"], true},
-	  {aura_env.config["option5"], true},
+    {aura_env.config["option2"], true},
+    {aura_env.config["option3"], true},
+    {aura_env.config["option4"], true},
+    {aura_env.config["option5"], true},
 }
 
 aura_env.affPlayers = {}
@@ -85,17 +85,17 @@ aura_env.me, _ = UnitName("player")
 
 function startVars()
     for _, v in pairs(aura_env.healers) do
-	      v[2] = true
-	  end
-	  aura_env.affPlayers = {}
+        v[2] = true
+    end
+    aura_env.affPlayers = {}
 end
 
 function changeHealerState(healer, newState)
     for k, v in pairs(aura_env.healers) do
-      if v[1] == healer then
-        v[2] = newState
-        return true
-      end
+        if v[1] == healer then
+            v[2] = newState
+            return true
+        end
     end
     return false
 end
@@ -122,10 +122,10 @@ end
 --------------- 
 ]]--
 
-t = function (event, ...)
+t = function(event, ...)
     if event == "ENCOUNTER_START" then
-	      control = 0 -- control variable to trigger the WA once the WG is cast, 3 players are afflicted by Discombobulation and 3 players are thrown up
-		    counter = 0
+        control = 0 -- control variable to trigger the WA once the WG is cast, 3 players are afflicted by Discombobulation and 3 players are thrown up
+        counter = 0
         flagged = false
         startVars()
     elseif event == "ENCOUNTER_END" then
@@ -134,42 +134,42 @@ t = function (event, ...)
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local msg = select(2, ...)
         local spellID = select(12, ...)
-		    local sourceName = select(5, ...)
+        local sourceName = select(5, ...)
         local destName = select(9, ...)
         flagged = false or flagged
         control = control or 0
         counter = counter or 0
         if msg == "SPELL_CAST_SUCCESS" and spellID == 287952 then --check for Wormhole Generator
             startVars()
-		        control = 0
-			      counter = 0
+            control = 0
+            counter = 0
             flagged = false
             
         elseif msg == "SPELL_AURA_APPLIED" then
-		        if spellID == 287167 then --check for Discombobulation
+            if spellID == 287167 then --check for Discombobulation
                 counter = counter + 1
-				        changeHealerState(destName, false)
-				        aura_env.affPlayers[counter] = destName
+                changeHealerState(destName, false)
+                aura_env.affPlayers[counter] = destName
                 if destName == aura_env.me then flagged = true end
                 -- SetRaidTarget(destName, counter+3)
                 
             elseif spellID == 287114 then --check for Miscalculated Teleport
-			          changeHealerState(destName, false)
-		            control = control + 1
+                changeHealerState(destName, false)
+                control = control + 1
                 if destName == aura_env.me then flagged = true end
-		            if control == 3 and not flagged then
+                if control == 3 and not flagged then
                     aura_env.display = playerDispelDecision()
-				            return true
-			          end
-		        end
+                    return true
+                end
+            end
 			
         elseif msg == "SPELL_AURA_REMOVED" then
             if spellID == 287167 or spellID == 287114 then --check for Discombobulation
             changeHealerState(destName, true)
             -- SetRaidTarget(destName, 0)
             end
-		    end
-	  end
+        end
+    end
 end
 
 trigger = false
