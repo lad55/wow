@@ -82,6 +82,12 @@ positions = {
         "star wave3",
         "star wave4",
         "star wave5",
+        "star wave6",
+        "star wave7",
+        "star wave8",
+        "star wave9",
+        "star wave10",
+        "star wave11",
     },
     
     [2] = { --orange
@@ -90,6 +96,12 @@ positions = {
         "circle wave3",
         "circle wave4",
         "circle wave5",
+        "circle wave6",
+        "circle wave7",
+        "circle wave8",
+        "circle wave9",
+        "circle wave10",
+        "circle wave11",
     },
     
     [3] = { --diamond
@@ -98,6 +110,12 @@ positions = {
         "diamond wave3",
         "diamond wave4",
         "diamond wave5",
+        "diamond wave6",
+        "diamond wave7",
+        "diamond wave8",
+        "diamond wave9",
+        "diamond wave10",
+        "diamond wave11",
     }
 }
 
@@ -143,8 +161,8 @@ end
 
 
 t("ENCOUNTER_START")
-
-while true do
+i = 0
+while i < 11 do
     math.randomseed(math.random() + os.clock())
 
     raidIndex = rollUnique()
@@ -166,4 +184,5 @@ while true do
 
     io.read()
     resetRolls()
+    i = i + 1
 end
